@@ -1,0 +1,19 @@
+
+version: '3.8'
+
+services:
+  portal-builder:
+    image: node:20-alpine
+    container_name: portal-auto-builder
+    working_dir: /app
+    volumes:
+      - .:/app
+      # 关键：将 node_modules 放在容器内部卷中，避免群晖 SMB/文件系统的权限冲突和速度缓慢
+      - /app/node_modules
+    environment:
+      - NODE_ENV=production
+      - CHOKIDAR_USEPOLLING=true
+    # 容器启动逻辑：安装依赖 -> 开启持续构建模式
+    # 只要你修改了 constants.ts 或 App.tsx，dist 文件夹就会在几秒内自动更新
+    command: sh -c "npm install && npm run build:watch"
+    restart: always
