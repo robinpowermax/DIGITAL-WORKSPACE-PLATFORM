@@ -3,10 +3,10 @@ import { ToolLink, CategoryInfo } from './types';
 
 /**
  * 【修改密码步骤】
- * 1. 修改下面的 PORTAL_VERSION（比如从 1.2.9 改为 1.3.0），这样网页才会提示你“同步更新”
+ * 1. 修改下面的 PORTAL_VERSION（比如从 1.3.1 改为 1.3.2），这样网页才会提示你“同步更新”
  * 2. 修改下面的 DEFAULT_ADMIN_PASSWORD 
  */
-export const PORTAL_VERSION = "1.3.0"; 
+export const PORTAL_VERSION = "1.3.2"; 
 
 // 默认初始密码：已恢复为 888888
 export const DEFAULT_ADMIN_PASSWORD = "888888";
@@ -19,15 +19,6 @@ export const DEFAULT_CATEGORIES: CategoryInfo[] = [
 ];
 
 export const DEFAULT_TOOLS: ToolLink[] = [
-  {
-    id: '1',
-    name: '热处理气氛计算器',
-    description: '氮甲醇/纯甲醇与Rx发生气成本对比分析及热平衡计算。',
-    url: './rx-calc/', 
-    iconName: 'Calculator',
-    color: '#f97316',
-    categoryId: 'cat_2'
-  },
   {
     id: '2',
     name: '设备状态监控',

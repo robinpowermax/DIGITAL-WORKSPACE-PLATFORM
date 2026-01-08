@@ -503,7 +503,14 @@ export const TRANSLATIONS = ${JSON.stringify(TRANSLATIONS, null, 2)};
               value={exportConfig()} 
               className="w-full h-[55vh] p-10 bg-slate-50 border border-slate-200 rounded-[2rem] font-mono text-[11px] leading-relaxed text-slate-600 resize-none outline-none shadow-inner"
             />
-            <button onClick={() => { navigator.clipboard.writeText(exportConfig()); alert('协议已复制到剪贴板！'); }} className="py-6 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-[0.3em] hover:bg-black shadow-2xl transition-all flex items-center justify-center gap-4">
+            <button 
+              onClick={() => { 
+                navigator.clipboard.writeText(exportConfig()); 
+                alert('协议已复制到剪贴板！'); 
+                setShowExportModal(false); 
+              }} 
+              className="py-6 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-[0.3em] hover:bg-black shadow-2xl transition-all flex items-center justify-center gap-4"
+            >
               <Download size={20}/> 复制源码内容并关闭
             </button>
           </div>
