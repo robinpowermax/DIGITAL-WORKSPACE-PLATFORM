@@ -243,7 +243,7 @@ export const TRANSLATIONS = ${JSON.stringify(TRANSLATIONS, null, 2)};
 
       <header className={`sticky top-0 z-40 w-full ${isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white/80 border-slate-200'} backdrop-blur-xl border-b px-8 h-24`}>
         <div className="max-w-7xl mx-auto h-full flex items-center justify-between">
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-5 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <div className={`w-14 h-14 ${themeConfig.primary} rounded-2xl flex items-center justify-center shadow-lg text-white`}>
               <Cpu className="w-8 h-8" />
             </div>
@@ -351,9 +351,14 @@ export const TRANSLATIONS = ${JSON.stringify(TRANSLATIONS, null, 2)};
                 
                 <div className={`mt-auto flex items-center justify-between pt-8 border-t ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
                   <span className={`text-[11px] font-black uppercase tracking-widest ${themeConfig.accent}`}>{cat?.label || 'SYS'}</span>
-                  <a href={tool.url} className={`flex items-center gap-2 text-xs font-black ${isDark ? 'bg-slate-700 text-white' : 'bg-slate-100 text-slate-900'} px-6 py-3 rounded-xl hover:${themeConfig.primary} hover:text-white transition-all shadow-sm`}>
+                  <button 
+                    onClick={() => {
+                      if (tool.url && tool.url !== '#') window.location.href = tool.url;
+                    }} 
+                    className={`flex items-center gap-2 text-xs font-black ${isDark ? 'bg-slate-700 text-white' : 'bg-slate-100 text-slate-900'} px-6 py-3 rounded-xl hover:${themeConfig.primary} hover:text-white transition-all shadow-sm`}
+                  >
                     进入 <ChevronRight size={16} />
-                  </a>
+                  </button>
                 </div>
               </div>
             );
