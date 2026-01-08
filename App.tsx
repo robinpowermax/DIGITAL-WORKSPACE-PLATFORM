@@ -105,8 +105,10 @@ const App: React.FC = () => {
   const themeConfig = THEMES[currentTheme];
   const isDark = ['tech-blue', 'royal-purple'].includes(currentTheme);
 
+  // 关键修复：只有当代码文件的版本号严格大于浏览器本地版本号时，才提示同步。
+  // 这避免了管理员在 UI 中调高版本号后，系统检测到“不匹配”而触发重置。
   useEffect(() => {
-    if (PORTAL_VERSION !== currentVersion) {
+    if (parseFloat(PORTAL_VERSION) > parseFloat(currentVersion)) {
       setShowUpdateModal(true);
     }
   }, [currentVersion]);
@@ -124,6 +126,9 @@ const App: React.FC = () => {
     setIsAuthorized(false);
     localStorage.removeItem('pw_auth_token');
     setShowUpdateModal(false);
+    
+    // 更新快照，防止同步后立即弹出修改确认
+    snapshotRef.current = { tools: JSON.stringify(DEFAULT_TOOLS), cats: JSON.stringify(DEFAULT_CATEGORIES) };
     alert(`核心同步成功，当前版本: V${PORTAL_VERSION}`);
   };
 
@@ -162,6 +167,7 @@ const App: React.FC = () => {
     const currentToolsJson = JSON.stringify(tools);
     const currentCatsJson = JSON.stringify(categories);
     if (currentToolsJson !== snapshotRef.current.tools || currentCatsJson !== snapshotRef.current.cats) {
+      // 默认建议版本号增加 0.1
       const nextVer = (parseFloat(currentVersion) + 0.1).toFixed(1);
       setPendingVersion(nextVer);
       setShowConfirmUpdateModal(true);
@@ -171,10 +177,17 @@ const App: React.FC = () => {
   };
 
   const finalizeUpdate = () => {
+    // 立即写入，确保状态切换前数据已持久化
+    localStorage.setItem('pw_version', pendingVersion);
+    localStorage.setItem('pw_tools', JSON.stringify(tools));
+    localStorage.setItem('pw_cats', JSON.stringify(categories));
+
     setCurrentVersion(pendingVersion);
     setShowConfirmUpdateModal(false);
     setShowAdminModal(false);
     setShowExportModal(true);
+    
+    // 更新快照，消除差异，防止退出确认重复弹出
     snapshotRef.current = { tools: JSON.stringify(tools), cats: JSON.stringify(categories) };
   };
 
@@ -207,7 +220,10 @@ const App: React.FC = () => {
   const exportConfig = () => {
     return `import { ToolLink, CategoryInfo } from './types';
 
-// 版本号更新
+/**
+ * 【版本协议】
+ * 当前环境固化版本：${currentVersion}
+ */
 export const PORTAL_VERSION = "${currentVersion}"; 
 
 // 管理员登录密码
