@@ -2,9 +2,9 @@ import { ToolLink, CategoryInfo } from './types';
 
 /**
  * 【版本协议】
- * 当前环境固化版本：1.3.4
+ * 当前环境固化版本：1.5
  */
-export const PORTAL_VERSION = "1.3.4"; 
+export const PORTAL_VERSION = "1.5"; 
 
 // 管理员登录密码
 export const DEFAULT_ADMIN_PASSWORD = "82884538";
@@ -40,6 +40,15 @@ export const DEFAULT_TOOLS: ToolLink[] = [
     "url": "./endo-calc",
     "iconName": "Calculator",
     "color": "#10b981",
+    "categoryId": "cat_2"
+  },
+  {
+    "id": "1768030866475",
+    "name": "PRE-SENSE",
+    "description": "炉子医生的开发版本 版本号v4.2.0",
+    "url": "./PRE-SENSE",
+    "iconName": "Activity",
+    "color": "#f97316",
     "categoryId": "cat_2"
   }
 ];
