@@ -1,23 +1,96 @@
 
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>宝华威数字化工具门户</title>
+    <title>PANTECH | PreSense 工业预测终端</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-      @media print {
-        .no-print { display: none !important; }
-        .print-only { display: block !important; visibility: visible !important; position: static !important; }
-        body { background: white !important; margin: 0; padding: 0; }
-        #root { padding: 0; }
-      }
-      .print-only { display: none; }
-      @page {
-        size: auto;
-        margin: 10mm;
-      }
+        :root {
+            --bg-deep: #0a0805;
+            --bg-surface: #14110d;
+            --accent-orange: #ff9d00;
+            --accent-amber: #ffcc00;
+            --accent-red: #ff3c00;
+            --text-main: #f0e6d2;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            margin: 0;
+            overflow: hidden;
+            background-image: 
+                linear-gradient(rgba(20, 15, 10, 0) 50%, rgba(0, 0, 0, 0.15) 50%),
+                linear-gradient(90deg, rgba(255, 100, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 100, 255, 0.02));
+            background-size: 100% 4px, 4px 100%;
+        }
+
+        @keyframes subtle-flicker {
+            0% { opacity: 0.99; }
+            10% { opacity: 0.97; }
+            20% { opacity: 0.99; }
+            30% { opacity: 0.98; }
+            40% { opacity: 0.99; }
+            100% { opacity: 1; }
+        }
+        .crt-flicker { animation: subtle-flicker 4s infinite linear; }
+
+        .scanline-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,160,0,0) 0%,
+                rgba(255,160,0,0.02) 50%,
+                rgba(255,160,0,0) 100%
+            );
+            height: 120px;
+            z-index: 100;
+            pointer-events: none;
+            animation: scanline 12s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-120px); }
+            100% { transform: translateY(100vh); }
+        }
+
+        .grid-bg {
+            background-image: 
+                linear-gradient(to right, rgba(255, 157, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 157, 0, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .glow-orange { text-shadow: 0 0 10px rgba(255, 157, 0, 0.6); }
+        .glow-border-orange { box-shadow: 0 0 12px rgba(255, 157, 0, 0.2), inset 0 0 6px rgba(255, 157, 0, 0.1); }
+        
+        .bevel-panel {
+            background: rgba(20, 17, 13, 0.95);
+            border: 2px solid #2d2419;
+            position: relative;
+            clip-path: polygon(
+                10px 0%, calc(100% - 10px) 0%, 100% 10px, 
+                100% calc(100% - 10px), calc(100% - 10px) 100%, 
+                10px 100%, 0% calc(100% - 10px), 0% 10px
+            );
+        }
+
+        .hardware-knob {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background: conic-gradient(#4a3f35, #1a1612, #4a3f35);
+            border: 1px solid #2d2419;
+        }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #0a0805; border-left: 1px solid #2d2419; }
+        ::-webkit-scrollbar-thumb { background: #3d3122; border: 2px solid #0a0805; }
+        ::-webkit-scrollbar-thumb:hover { background: #5a4832; }
     </style>
 <script type="importmap">
 {
@@ -25,6 +98,8 @@
     "react": "https://esm.sh/react@^19.2.3",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.35.0",
+    "recharts": "https://esm.sh/recharts@^3.6.0",
     "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
     "vite": "https://esm.sh/vite@^7.3.1",
     "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
@@ -32,7 +107,8 @@
 }
 </script>
 </head>
-<body class="bg-slate-50 font-sans antialiased text-slate-900">
+<body class="grid-bg crt-flicker">
+    <div class="scanline-overlay"></div>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
 </body>
