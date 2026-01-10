@@ -4,22 +4,17 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: './', 
+  base: './',
+  define: {
+    // 显式将环境变量注入到客户端代码
+    'process.env.API_KEY': JSON.stringify(process.env.API_KEY)
+  },
   server: {
-    watch: {
-      usePolling: true,
-      interval: 100
-    },
-    host: true,
-    port: 5173
+    port: 3000
   },
   build: {
     outDir: 'dist',
-    // 强制清理旧目录
-    emptyOutDir: true,
-    assetsDir: 'assets',
-    minify: 'esbuild', // 切换到 esbuild，无需额外安装 terser 依赖，解决环境兼容性问题
-    reportCompressedSize: false,
-    chunkSizeWarningLimit: 2000
+    sourcemap: false,
+    chunkSizeWarningLimit: 1000
   }
 });
